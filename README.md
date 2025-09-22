@@ -11,19 +11,15 @@ pipenv shell
 ```
 
 ### 2. Environment Variables
-Create `env.py` with your credentials:
+Create `.env` file and add your credentials:
 ```python
+OPENAI_API_KEY = "API_KEY"
 INSTAGRAM_USERNAME = "your_instagram_username"
 INSTAGRAM_PASSWORD = "your_instagram_password"
 ```
 
-Set OpenAI API key:
-```bash
-export OPENAI_API_KEY="your_openai_api_key"
-```
-
 ### 3. Instagram Session
-First run creates `session.json` for future logins.
+First run creates `session.json` for future logins. No need to do anything here.
 
 ## Usage
 
