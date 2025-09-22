@@ -6,6 +6,10 @@ name = "pypi"
 [packages]
 gender-guesser = "*"
 rapidfuzz = "*"
+seleniumbase = "*"
+instagrapi = "*"
+openai = "*"
+python-dotenv = "*"
 
 [dev-packages]
 

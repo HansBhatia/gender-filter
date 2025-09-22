@@ -1,0 +1,6 @@
+.env
+images/*
+usernames.txt
+male_usernames.txt
+session.json
+debug_log.json
