@@ -20,7 +20,7 @@ def format_proxy_url(proxy_string):
     return proxy_string
 
 
-def test_proxy(proxy_string, account_username=None, timeout=10):
+def test_proxy(proxy_string, account_username=None, timeout=15):
     """Test if a proxy works by making requests to test endpoints."""
 
     proxy_url = format_proxy_url(proxy_string)
@@ -30,9 +30,11 @@ def test_proxy(proxy_string, account_username=None, timeout=10):
         'https': proxy_url,
     }
 
+    # Multiple test endpoints in case one is down
     test_urls = [
-        ('http://httpbin.org/ip', 'HTTP'),
-        ('https://httpbin.org/ip', 'HTTPS'),
+        ('http://httpbin.org/ip', 'HTTP (httpbin)'),
+        ('https://api.ipify.org?format=json', 'HTTPS (ipify)'),
+        ('http://ip-api.com/json/', 'HTTP (ip-api)'),
     ]
 
     header = f"Account: {account_username}" if account_username else f"Proxy: {proxy_string}"
@@ -47,15 +49,27 @@ def test_proxy(proxy_string, account_username=None, timeout=10):
             response = requests.get(url, proxies=proxies, timeout=timeout)
 
             if response.status_code == 200:
-                ip_data = response.json()
-                print(f"✓ Works! IP: {ip_data.get('origin', 'unknown')}")
-                results.append(True)
+                try:
+                    ip_data = response.json()
+                    ip = ip_data.get('origin') or ip_data.get('ip') or ip_data.get('query') or 'unknown'
+                    print(f"✓ Works! IP: {ip}")
+                    results.append(True)
+                except:
+                    print(f"✓ Works! (status 200)")
+                    results.append(True)
+            elif response.status_code == 503:
+                print(f"✗ Service Unavailable (503) - Proxy server may be down or overloaded")
+                results.append(False)
             else:
                 print(f"✗ Failed (status {response.status_code})")
                 results.append(False)
 
         except ProxyError as e:
-            print(f"✗ Proxy error: {str(e)[:60]}")
+            error_msg = str(e)
+            if '503' in error_msg:
+                print(f"✗ Proxy returns 503 - Server unavailable/overloaded")
+            else:
+                print(f"✗ Proxy error: {error_msg[:60]}")
             results.append(False)
         except Timeout:
             print(f"✗ Timeout ({timeout}s)")
