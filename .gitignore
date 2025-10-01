@@ -1,6 +1,33 @@
+# Environment
 .env
-images/*
-usernames.txt
-male_usernames.txt
+env.py
+
+# Accounts
+accounts.json
+
+# Sessions
 session.json
+sessions/
+
+# Data
+data/usernames.txt
+data/*.txt
+
+# Output
+output/
+*.txt
+!README.txt
+
+# Temp files
+images/
+downloaded_files/
+screenshot.png
+*.pyc
+__pycache__/
+
+# Output files (root level)
+male_usernames.txt
 debug_log.json
+*.json
+!accounts.example.json
+!Pipfile.json
