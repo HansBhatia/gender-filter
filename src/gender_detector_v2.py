@@ -4,13 +4,18 @@ import base64
 from typing import Optional, Dict, List
 import asyncio
 import logging
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 class GenderDetector:
     """Clean async gender detector using OpenAI GPT-4o-mini."""
 
     def __init__(self, api_key: Optional[str] = None, max_concurrent: int = 50):
         self.model = "gpt-4o-mini"
-        self.api_key = api_key or os.environ.get("OPENAI_API_KEY")
+        print(os.getenv("OPENAI_API_KEY"))
+        self.api_key = api_key or os.getenv("OPENAI_API_KEY")
         self.client = AsyncOpenAI(api_key=self.api_key)
         self.semaphore = asyncio.Semaphore(max_concurrent)
         self.logger = logging.getLogger(__name__)
